@@ -33,7 +33,10 @@
     </div>
     <div class="nav-cta">
       <a class="btn btn-outline" href="#ubicacion">Ver ubicación</a>
-      <a class="btn btn-primary" id="nav-wa" href="https://wa.me/18095253216" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <a class="btn btn-primary" id="nav-wa" href="https://wa.me/18095253216" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.33 4.95L2 22l5.28-1.39a9.9 9.9 0 0 0 4.76 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.1c-.24.68-1.4 1.32-1.94 1.36-.5.05-1.02.24-3.42-.72-2.89-1.16-4.75-4.07-4.9-4.26-.14-.19-1.17-1.56-1.17-2.97 0-1.42.75-2.11 1.02-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.14-.3.3-.13.58.17.29.77 1.27 1.65 2.06 1.13 1.01 2.09 1.32 2.38 1.47.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.63-.14.26.1 1.65.78 1.93.92.29.14.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
+        <span class="btn-label">Escribir por WhatsApp</span>
+      </a>
       <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -159,17 +162,29 @@
     <div class="sec-head reveal">
       <p class="kicker">Galería</p>
       <h2>Conoce el local</h2>
-      <p>Estamos ampliando esta galería con fotos del showroom y del inventario. Por ahora, así nos vemos por fuera.</p>
+      <p>Así nos vemos por fuera, y así se ven algunas de nuestras piezas y ofertas más recientes.</p>
     </div>
     <div class="gal-grid reveal">
       <div class="gal-item full">
         <img src="assets/img/galeria-01-fachada.jpg" alt="Fachada de Electro Centro Bonao en Plaza Bonatica, Bonao">
         <div class="gal-caption">Fachada · Plaza Bonatica, Bonao</div>
       </div>
-      <div class="gal-item"><div class="gal-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg><span>Próximamente</span></div></div>
-      <div class="gal-item"><div class="gal-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg><span>Próximamente</span></div></div>
-      <div class="gal-item"><div class="gal-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg><span>Próximamente</span></div></div>
-      <div class="gal-item"><div class="gal-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg><span>Próximamente</span></div></div>
+      <div class="gal-item">
+        <img src="assets/img/galeria-02-nueva-mercancia-sala.jpg" alt="Juego de sala en caoba, nueva mercancía de Electro Centro Bonao" style="object-position:center 58%">
+        <div class="gal-caption">Nueva mercancía · Juego de sala en caoba</div>
+      </div>
+      <div class="gal-item">
+        <img src="assets/img/galeria-03-oferta-aposento.jpg" alt="Oferta de juegos de aposento a 5 meses sin intereses" style="object-position:center 35%">
+        <div class="gal-caption">Oferta · 5 meses sin intereses en aposentos</div>
+      </div>
+      <div class="gal-item">
+        <img src="assets/img/galeria-04-materiales.jpg" alt="Sofá en tela bouclé con base en cobre encerado" style="object-position:bottom">
+        <div class="gal-caption">Materiales · Bouclé y cobre encerado</div>
+      </div>
+      <div class="gal-item">
+        <img src="assets/img/galeria-05-interior-confort.jpg" alt="Catálogo de muebles de interior y confort de Electro Centro Bonao" style="object-position:bottom">
+        <div class="gal-caption">Interior & Confort</div>
+      </div>
     </div>
   </div>
 </section>
@@ -214,16 +229,13 @@
           <div><h4>Teléfono / WhatsApp</h4><p>+1 809-525-3216</p></div>
         </div>
         <div class="loc-actions">
-          <a class="btn btn-primary" href="https://www.google.com/maps/place/Electro+Centro+Bonao/@18.9408266,-70.4130341,17z/data=!4m6!3m5!1s0x8eafdf509e668639:0x7b97da8386cd9e9e!8m2!3d18.9408215!4d-70.4104592" target="_blank" rel="noopener">Cómo llegar</a>
+          <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=18.9408215,-70.4104592" target="_blank" rel="noopener">Cómo llegar</a>
           <a class="btn btn-outline" href="https://wa.me/18095253216" target="_blank" rel="noopener">Escribir por WhatsApp</a>
         </div>
       </div>
     </div>
-    <div class="map-visual reveal" role="img" aria-label="Ilustración de ubicación de Electro Centro Bonao en Plaza Bonatica">
-      <div class="map-pin">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.6 2 4 5.6 4 10c0 6 8 12 8 12s8-6 8-12c0-4.4-3.6-8-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
-        <div class="pulse"></div>
-      </div>
+    <div class="map-visual reveal">
+      <iframe src="https://www.google.com/maps?q=18.9408215,-70.4104592(Electro+Centro+Bonao)&z=17&output=embed" title="Mapa de Electro Centro Bonao en Plaza Bonatica" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
     </div>
   </div>
 </section>
