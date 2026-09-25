@@ -1,0 +1,9 @@
+/* ============================================================
+   ANIMATIONS.CSS — scroll-reveal, keyframes, reduced motion
+   ============================================================ */
+
+/* ================ REVEAL ================ */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:translateY(0)}
+@keyframes pulse{0%{transform:scale(.6);opacity:1}100%{transform:scale(2.6);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important}html{scroll-behavior:auto}}
