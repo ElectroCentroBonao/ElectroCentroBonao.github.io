@@ -1,88 +1,69 @@
-/* EXTRAS.CSS — ofertas, cuotas, stats, estado abierto/cerrado, interacciones. Cargar después de polish.css */
-.stats{position:relative;z-index:2;padding:0}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line-soft)}
-.stat{padding:36px 18px;text-align:center;border-right:1px solid var(--line-soft)}
-.stat:last-child{border-right:0}
-.stat b{display:block;font-family:var(--font-head);font-size:clamp(2rem,4.4vw,3.2rem);font-weight:600;line-height:1;color:var(--cream)}
-.stat b i{font-style:italic;color:var(--red-500)}
-.stat span{display:block;margin-top:10px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
-@media(max-width:700px){.stats-grid{grid-template-columns:1fr 1fr}.stat{padding:26px 10px}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line-soft)}}
-/* ofertas */
-.offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.offer{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .45s var(--ease),border-color .3s,box-shadow .45s var(--ease);transform-style:preserve-3d}
-.offer:hover{border-color:var(--blue-400);box-shadow:0 34px 60px -30px rgba(0,0,0,.9)}
-.offer-img{position:relative;aspect-ratio:16/11;overflow:hidden}
-.offer-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
-.offer:hover .offer-img img{transform:scale(1.07)}
-.offer-tag{position:absolute;top:16px;left:16px;padding:7px 14px;border-radius:999px;background:var(--red-600);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
-.offer-body{padding:28px;display:flex;flex-direction:column;gap:6px;flex:1}
-.offer-body h3{font-size:1.5rem}
-.offer-body>p{font-size:.95rem;color:var(--cream-dim)}
-.was{text-decoration:line-through;color:var(--steel)!important;margin-top:10px}
-.now{font-family:var(--font-head);font-size:2.4rem!important;font-weight:600;color:var(--cream)!important;line-height:1.1}
-.now small{font-size:1rem;color:var(--cream-dim);margin-right:6px}
-.save{display:inline-block;align-self:flex-start;padding:5px 12px;border-radius:999px;background:rgba(37,211,102,.14);color:#6fe3a0!important;font-size:.8rem!important;font-weight:600}
-.offer-body .btn{margin-top:20px;align-self:flex-start}
-.fine{margin-top:14px;font-size:.74rem!important;color:var(--steel)!important}
-@media(max-width:700px){
-  .offer-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -24px;padding:4px 24px 18px;scrollbar-width:none}
-  .offer-grid::-webkit-scrollbar{display:none}
-  .offer{flex:0 0 84%;scroll-snap-align:center}
-  .offer-body{padding:22px}.now{font-size:2rem!important}
-}
-/* calculadora */
-.calc{margin-top:28px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:40px;border-radius:26px;background:radial-gradient(120% 120% at 0 0,rgba(42,60,112,.9),rgba(14,19,32,.92));border:1px solid var(--line);box-shadow:0 30px 60px -34px #000}
-.calc h3{font-size:1.6rem;margin-bottom:8px}.calc p{color:var(--cream-dim);font-size:.95rem}
-.calc-price{font-family:var(--font-head);font-size:2.6rem;font-weight:600;margin:22px 0 6px}
-.calc input[type=range]{width:100%;height:30px;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer;touch-action:pan-y}
-.calc input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:9px;background:linear-gradient(90deg,var(--red-500) var(--p,40%),rgba(243,237,224,.16) var(--p,40%))}
-.calc input[type=range]::-moz-range-track{height:6px;border-radius:9px;background:rgba(243,237,224,.16)}
-.calc input[type=range]::-moz-range-progress{height:6px;border-radius:9px;background:var(--red-500)}
-.calc input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;background:var(--cream);border:4px solid var(--red-500);box-shadow:0 6px 16px rgba(0,0,0,.6)}
-.calc input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--cream);border:4px solid var(--red-500)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.chip{padding:9px 16px;border:1px solid var(--line);border-radius:999px;font-size:.84rem;font-weight:600;transition:background .25s,border-color .25s,transform .25s var(--ease)}
-.chip:hover,.chip.on{background:rgba(74,114,209,.22);border-color:var(--blue-400)}.chip:active{transform:scale(.95)}
-.calc-out{text-align:center;padding:30px 20px;border-radius:20px;background:rgba(10,14,24,.55);border:1px dashed var(--line)}
-.calc-out small{display:block;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
-.calc-out strong{display:block;font-family:var(--font-head);font-size:clamp(2.4rem,6vw,3.4rem);font-weight:600;line-height:1.1;margin:8px 0}
-.calc-out em{display:block;font-style:italic;color:var(--cream-dim);margin-bottom:18px;font-family:var(--font-head)}
-.calc-out .btn{justify-content:center;width:100%}
-.calc-note{margin-top:14px;font-size:.72rem!important;color:var(--steel)!important}
-@media(max-width:900px){.calc{grid-template-columns:1fr;padding:26px 20px;gap:26px}}
-/* estado abierto */
-.open-pill{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.84rem}
-.open-pill::before{content:'';width:9px;height:9px;border-radius:50%;background:var(--c,#6b7a99);box-shadow:0 0 0 0 var(--c,#6b7a99);animation:blip 2s infinite}
-.open-pill.on{--c:#2fd37c;color:#8cf0b8}.open-pill.off{--c:#e5533d;color:#f0a59a}
-@keyframes blip{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
-/* categorias clicables */
-.cat-card{cursor:pointer}
-.cat-go{display:inline-block;margin-top:16px;font-size:.82rem;font-weight:600;color:var(--blue-400);opacity:.75;transition:opacity .3s,transform .3s var(--ease)}
-.cat-card:hover .cat-go,.cat-card:focus-visible .cat-go{opacity:1;transform:translateX(6px)}
-@media(hover:none){.cat-card:active{background:var(--navy-800);transform:scale(.98)}.cat-go{opacity:1}}
-/* nav activo */
-.nav-links a{position:relative;padding:6px 0}
-.nav-links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--red-500);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
-.nav-links a:hover::after,.nav-links a.active{color:var(--cream)}.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
-.burger.x span:nth-child(1){transform:translateY(9px) rotate(45deg)}.burger.x span:nth-child(2){opacity:0}.burger.x span:nth-child(3){transform:translateY(-9px) rotate(-45deg)}
-/* lightbox */
-.lb-nav{position:absolute;top:50%;width:52px;height:52px;margin-top:-26px;border-radius:50%;background:rgba(243,237,224,.12);font-size:1.6rem;display:grid;place-items:center;transition:background .25s}
-.lb-nav:hover{background:rgba(243,237,224,.25)}.lb-prev{left:18px}.lb-next{right:18px}
-.lb-count{position:absolute;bottom:20px;left:0;right:0;text-align:center;font-size:.8rem;letter-spacing:.14em;color:var(--steel)}
-.lightbox img{max-width:100%;object-fit:contain}
-@media(max-width:700px){.lb-nav{width:44px;height:44px;top:auto;bottom:14px;margin:0}.lb-prev{left:18px}.lb-next{right:18px}}
-@media(hover:hover){.btn-primary{will-change:transform}}
-@media(prefers-reduced-motion:reduce){.open-pill::before{animation:none}}
-/* ===== vida: brillo de cursor, hexágonos flotantes, ripple táctil ===== */
-.cursor-glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s;background:radial-gradient(circle,rgba(74,114,209,.16),rgba(214,58,42,.05) 45%,transparent 70%);will-change:transform}
+/* ==========================================================================
+   Talleres Juma — extras.css
+   Capa de pulido: engranaje de scroll, brillo, luces de faro, lightbox, fluidez móvil
+   ========================================================================== */
+
+/* ---------- Engranaje que gira con el scroll (punta de la barra de progreso) ---------- */
+.gear-tip{position:fixed;left:0;top:4px;width:22px;height:22px;z-index:300;pointer-events:none;color:var(--red-bright);
+  filter:drop-shadow(0 0 8px rgba(239,36,48,.65));will-change:transform}
+.gear-tip svg{width:100%;height:100%}
+
+/* ---------- Navegación que se esconde al bajar y vuelve al subir ---------- */
+.nav{transition:translate .45s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease),border-color .4s var(--ease)}
+.nav.hide:not(.open){translate:0 -115%}
+.nav-links a{position:relative}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--red-bright),var(--blue-bright));transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links a.active{color:var(--white)}
+
+/* ---------- Brillo que sigue al cursor / al dedo ---------- */
+.service-card,.testimonial-card{position:relative;isolation:isolate}
+.service-card::before,.testimonial-card::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;opacity:0;
+  transition:opacity .35s var(--ease);background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(59,99,236,.24),rgba(209,18,31,.07) 55%,transparent 75%)}
+.service-card:hover::before,.testimonial-card:hover::before,.service-card.lit::before,.testimonial-card.lit::before{opacity:1}
+
+/* ---------- Ambiente: luces de faro que cruzan, brillo de cursor, ripple táctil ---------- */
+.streaks{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;mix-blend-mode:screen}
+.streaks i{position:absolute;left:-40vw;top:var(--y);width:36vw;height:2px;opacity:0;
+  background:linear-gradient(90deg,transparent,var(--c),transparent);box-shadow:0 0 14px var(--c);
+  animation:streak var(--d) cubic-bezier(.45,0,.2,1) var(--dl) infinite}
+@keyframes streak{0%{transform:translate3d(0,0,0);opacity:0}3%{opacity:.55}13%{transform:translate3d(190vw,0,0);opacity:0}100%{transform:translate3d(190vw,0,0);opacity:0}}
+.cursor-glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s;
+  background:radial-gradient(circle,rgba(59,99,236,.15),rgba(209,18,31,.05) 45%,transparent 70%);will-change:transform}
 .cursor-glow.on{opacity:1}
-.hexes{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
-.hexes i{position:absolute;left:var(--x);bottom:-60px;width:var(--s);height:calc(var(--s)*1.1);background:var(--c);opacity:0;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%);animation:hexUp var(--d) linear var(--dl) infinite}
-@keyframes hexUp{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}10%{opacity:.16}85%{opacity:.1}100%{transform:translate3d(var(--dx),-115vh,0) rotate(200deg);opacity:0}}
-.ripple{position:fixed;z-index:55;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;pointer-events:none;border:2px solid rgba(243,237,224,.55);background:rgba(214,58,42,.25);animation:rip .7s var(--ease) forwards}
+.ripple{position:fixed;z-index:55;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;pointer-events:none;
+  border:2px solid rgba(255,255,255,.5);background:rgba(239,36,48,.25);animation:rip .7s var(--ease) forwards}
 @keyframes rip{to{transform:scale(7);opacity:0}}
-.stat b{transition:transform .4s var(--ease)}.stat:hover b{transform:translateY(-4px) scale(1.04)}
-.rev-stars{background:linear-gradient(100deg,var(--red-500) 40%,#ffd6a0 50%,var(--red-500) 60%) 200% 0/250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:glint 4.5s ease-in-out infinite}
-@keyframes glint{to{background-position:-100% 0}}
-@media(max-width:700px){.hexes i:nth-child(n+6){display:none}.cursor-glow{display:none}}
-@media(prefers-reduced-motion:reduce){.hexes,.cursor-glow,.ripple{display:none}.rev-stars{animation:none}}
+
+/* ---------- Parallax suave en la galería (sin JS, corre en el compositor) ---------- */
+@supports (animation-timeline:view()){
+  .gallery-image-wrap img{scale:1.14;animation:gpar linear both;animation-timeline:view()}
+  @keyframes gpar{from{translate:0 -5%}to{translate:0 5%}}
+}
+.gallery-item{cursor:zoom-in}
+
+/* ---------- Lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;
+  background:rgba(6,12,43,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+.lb.open{opacity:1;pointer-events:auto}
+.lb img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:var(--radius-md);box-shadow:var(--shadow-deep);transform:scale(.94);transition:transform .45s var(--ease)}
+.lb.open img{transform:none}
+.lb-cap{font-family:var(--font-display);letter-spacing:.08em;text-transform:uppercase;font-size:.95rem;color:var(--ice);text-align:center}
+.lb-cap small{display:block;margin-top:4px;font-family:var(--font-body);letter-spacing:.14em;font-size:.72rem;color:var(--steel)}
+.lb button{position:absolute;display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:var(--surface-hi);color:#fff;font-size:1.7rem;border:1px solid var(--border-soft);transition:background .25s}
+.lb button:hover{background:var(--red)}
+.lb-x{top:16px;right:16px}.lb-prev{left:16px;top:50%;margin-top:-25px}.lb-next{right:16px;top:50%;margin-top:-25px}
+@media(max-width:700px){.lb-prev,.lb-next{top:auto;bottom:22px;margin:0}.lb-prev{left:22px}.lb-next{right:22px}.lb img{max-height:70vh}}
+
+/* ---------- Fluidez en celular: sin desenfoque animado, blur más liviano ---------- */
+@media(max-width:899px){
+  .reveal{filter:none;transform:translateY(22px)}
+  .reveal.is-visible{filter:none;transform:none}
+  .service-card,.testimonial-card,.footer,.social-pill{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .cursor-glow{display:none}
+  .streaks i:nth-child(n+3){display:none}
+}
+@media(hover:none){.service-card:active{transform:scale(.985)}}
+@media(prefers-reduced-motion:reduce){.streaks,.cursor-glow,.ripple,.gear-tip{display:none}
+  .gallery-image-wrap img{animation:none;scale:1}}
