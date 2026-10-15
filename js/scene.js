@@ -1,5 +1,5 @@
 /* ============================================================
-   SCENE.JS v2 — sala de estar nocturna que reacciona al scroll
+   SCENE.JS v3 — sala de estar nocturna que reacciona al scroll
    Three.js r128 (CDN en index.html, antes de este archivo).
    Sin assets externos: todas las texturas se pintan en canvas.
 
@@ -34,7 +34,7 @@
 
     /* ---------- renderer ---------- */
     var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:!isMobile, alpha:true, powerPreference:'high-performance'});
-    var dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    var dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.75);
     renderer.setPixelRatio(dpr);
     renderer.setSize(W, H);
     renderer.outputEncoding = THREE.sRGBEncoding;
@@ -108,14 +108,25 @@
       return c;
     }
     function fabricCanvas(size, seed){
-      var r = rng(seed), c = cv(size), g = c.getContext('2d');
-      g.fillStyle = '#dcdcdc'; g.fillRect(0,0,size,size);
-      var n = Math.round(9000 * (size/512) * (size/512));
-      for(var i=0;i<n;i++){
-        var x = r()*size, y = r()*size, rad = (0.8 + r()*2.2) * (size/512), a = r()*6.283;
-        g.strokeStyle = r() < 0.5 ? 'rgba(255,255,255,'+(0.10+r()*0.22)+')' : 'rgba(70,60,50,'+(0.06+r()*0.16)+')';
-        g.lineWidth = 1 * (size/512) + 0.3;
-        g.beginPath(); g.arc(x, y, rad, a, a + 2.4 + r()*1.5); g.stroke();
+      /* tela suave tipo felpa/lino: nubes de luz muy leves + fibras cortas y tenues */
+      var r = rng(seed), c = cv(size), g = c.getContext('2d'), k = size/512, i;
+      g.fillStyle = '#e4e4e4'; g.fillRect(0,0,size,size);
+      for(i=0;i<40;i++){
+        var x = r()*size, y = r()*size, rad = (30 + r()*70)*k, lt = r() < 0.5, a = 0.05 + r()*0.04;
+        for(var ox=-1;ox<=1;ox++) for(var oy=-1;oy<=1;oy++){
+          var px = x + ox*size, py = y + oy*size;
+          if(px < -rad || px > size+rad || py < -rad || py > size+rad) continue;
+          var gr = g.createRadialGradient(px,py,0,px,py,rad);
+          gr.addColorStop(0, lt ? 'rgba(255,255,255,'+(a*1.6)+')' : 'rgba(80,70,60,'+a+')');
+          gr.addColorStop(1, 'rgba(0,0,0,0)');
+          g.fillStyle = gr; g.fillRect(px-rad,py-rad,rad*2,rad*2);
+        }
+      }
+      g.lineCap = 'round'; g.lineWidth = Math.max(0.6, 0.9*k);
+      for(i=0;i<Math.round(16000*k*k);i++){
+        var fx = r()*size, fy = r()*size, an = r()*6.283, ln = (2 + r()*4)*k;
+        g.strokeStyle = r() < 0.5 ? 'rgba(255,255,255,'+(0.05+r()*0.09)+')' : 'rgba(70,60,55,'+(0.03+r()*0.06)+')';
+        g.beginPath(); g.moveTo(fx, fy); g.lineTo(fx + Math.cos(an)*ln, fy + Math.sin(an)*ln); g.stroke();
       }
       return c;
     }
@@ -134,8 +145,8 @@
       }
       for(var i=0;i<n;i++){
         var x = i*pw, hue = 22 + r()*9, sat = 30 + r()*14, split = size*(0.25 + r()*0.5);
-        segment(x, 0, split, 12 + r()*8, hue, sat);
-        segment(x, split, size, 12 + r()*8, hue, sat);
+        segment(x, 0, split, 23 + r()*9, hue, sat);
+        segment(x, split, size, 23 + r()*9, hue, sat);
         g.fillStyle = 'rgba(0,0,0,0.6)'; g.fillRect(x, 0, Math.max(1.5, size/600), size);
       }
       return c;
@@ -165,11 +176,23 @@
       return c;
     }
     function plasterCanvas(size){
-      var r = rng(31), c = cv(size), g = c.getContext('2d');
-      g.fillStyle = '#26324d'; g.fillRect(0,0,size,size);
-      for(var i=0;i<9000*Q;i++){
-        g.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,10,0.05)';
-        var s = 1 + r()*3; g.fillRect(r()*size, r()*size, s, s);
+      /* yeso blanco: nubes suaves sin costuras + grano fino */
+      var r = rng(31), c = cv(size), g = c.getContext('2d'), i, k = size/512;
+      g.fillStyle = '#f4f2ed'; g.fillRect(0,0,size,size);
+      for(i=0;i<70;i++){
+        var x = r()*size, y = r()*size, rad = (40 + r()*110)*k, lt = r() < 0.45, a = 0.05 + r()*0.05;
+        for(var ox=-1;ox<=1;ox++) for(var oy=-1;oy<=1;oy++){
+          var px = x + ox*size, py = y + oy*size;
+          if(px < -rad || px > size+rad || py < -rad || py > size+rad) continue;
+          var gr = g.createRadialGradient(px,py,0,px,py,rad);
+          gr.addColorStop(0, lt ? 'rgba(255,255,255,'+(a*2)+')' : 'rgba(120,108,95,'+a+')');
+          gr.addColorStop(1, 'rgba(0,0,0,0)');
+          g.fillStyle = gr; g.fillRect(px-rad,py-rad,rad*2,rad*2);
+        }
+      }
+      for(i=0;i<9000*Q;i++){
+        g.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.5)' : 'rgba(90,80,70,0.05)';
+        var s2 = (1 + r()*2)*k; g.fillRect(r()*size, r()*size, s2, s2);
       }
       return c;
     }
@@ -247,23 +270,24 @@
       return c;
     }
     function artBigCanvas(w, h){
+      /* arte minimalista: blanco roto, grises y negro */
       var r = rng(12), c = cv(w, h), g = c.getContext('2d'), i;
-      g.fillStyle = '#ece3d0'; g.fillRect(0,0,w,h);
-      g.fillStyle = '#c2603a'; g.beginPath(); g.arc(w*0.68, h*0.42, h*0.27, 0, 6.283); g.fill();
-      g.fillStyle = '#24365a'; g.beginPath(); g.arc(w*0.26, h*1.02, h*0.62, Math.PI, 0); g.fill();
-      g.fillStyle = '#c9a15a'; g.beginPath(); g.arc(w*0.56, h*1.02, h*0.36, Math.PI, 0); g.fill();
-      g.fillStyle = '#8a9a78'; g.beginPath(); g.arc(w*0.84, h*1.02, h*0.24, Math.PI, 0); g.fill();
-      g.strokeStyle = 'rgba(20,24,36,0.85)'; g.lineWidth = w*0.004;
+      g.fillStyle = '#efefeb'; g.fillRect(0,0,w,h);
+      g.fillStyle = '#b8babc'; g.beginPath(); g.arc(w*0.68, h*0.42, h*0.27, 0, 6.283); g.fill();
+      g.fillStyle = '#1c1e22'; g.beginPath(); g.arc(w*0.26, h*1.02, h*0.62, Math.PI, 0); g.fill();
+      g.fillStyle = '#8c9094'; g.beginPath(); g.arc(w*0.56, h*1.02, h*0.36, Math.PI, 0); g.fill();
+      g.fillStyle = '#d4d6d7'; g.beginPath(); g.arc(w*0.84, h*1.02, h*0.24, Math.PI, 0); g.fill();
+      g.strokeStyle = 'rgba(20,22,26,0.9)'; g.lineWidth = w*0.004;
       g.beginPath(); g.moveTo(w*0.08, h*0.2); g.lineTo(w*0.42, h*0.2); g.moveTo(w*0.08, h*0.26); g.lineTo(w*0.3, h*0.26); g.stroke();
       for(i=0;i<1400*Q;i++){
-        g.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.08)' : 'rgba(60,40,20,0.07)';
+        g.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.08)' : 'rgba(40,40,40,0.05)';
         g.fillRect(r()*w, r()*h, 2, 2);
       }
       return c;
     }
     function artArchesCanvas(w, h, p, seed){
       var r = rng(seed), c = cv(w, h), g = c.getContext('2d'), i;
-      g.fillStyle = '#efe7d6'; g.fillRect(0,0,w,h);
+      g.fillStyle = '#efefeb'; g.fillRect(0,0,w,h);
       function arch(cx, wd, top, color){
         g.fillStyle = color; g.beginPath(); g.moveTo(cx - wd/2, h);
         g.lineTo(cx - wd/2, top + wd/2); g.arc(cx, top + wd/2, wd/2, Math.PI, 0);
@@ -312,8 +336,8 @@
     var goboTex   = new THREE.CanvasTexture(goboCanvas());
     var vigTex    = new THREE.CanvasTexture(vignetteCanvas());
 
-    var woodWalnutTex = tex(woodCanvas('#6a4426', '#2f1b0d', '#9a6a3c', 11, sz(512)), true);
-    var woodOakTex    = tex(woodCanvas('#b98a55', '#7d5730', '#dcb681', 23, sz(512)), true);
+    var woodWalnutTex = tex(woodCanvas('#9b6d41', '#5a3a1e', '#c99a66', 11, sz(512)), true);
+    var woodOakTex    = tex(woodCanvas('#d3aa76', '#a07a4a', '#ecd0a2', 23, sz(512)), true);
     var fabricTex     = tex(fabricCanvas(sz(512), 3), true);
     var fabricLatheTex = tex(fabricCanvas(sz(512), 4), true, 7, 3);
     var floorTex      = tex(floorCanvas(sz(1024)), true, 15, 10);
@@ -337,9 +361,9 @@
     M.brass  = new THREE.MeshStandardMaterial({color:col(0xc9a15a), metalness:1, roughness:0.3});
     M.steel  = new THREE.MeshStandardMaterial({color:col(0x141926), metalness:0.75, roughness:0.4});
     M.marble = new THREE.MeshStandardMaterial({map:marbleTex, roughness:0.16, metalness:0.05});
-    M.matte  = new THREE.MeshStandardMaterial({color:col(0xf1eadb), roughness:0.9});
+    M.matte  = new THREE.MeshStandardMaterial({color:col(0xf3f3f1), roughness:0.9});
     M.paper  = new THREE.MeshStandardMaterial({color:col(0xeee6d2), roughness:0.95});
-    M.wall   = new THREE.MeshStandardMaterial({map:plasterTex, bumpMap:plasterTex, bumpScale:0.25, roughness:0.95, metalness:0});
+    M.wall   = new THREE.MeshStandardMaterial({map:plasterTex, bumpMap:plasterTex, bumpScale:0.35, color:col(0xdde2ee), roughness:0.95, metalness:0});
     M.floor  = new THREE.MeshStandardMaterial({map:floorTex, bumpMap:floorTex, bumpScale:0.4, roughness:0.4, metalness:0.05, envMapIntensity:0.8});
     M.rug    = new THREE.MeshStandardMaterial({map:rugTex, roughness:1, metalness:0, polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1});
     M.cane   = new THREE.MeshStandardMaterial({map:caneTex, transparent:true, alphaTest:0.5, side:THREE.DoubleSide, roughness:0.6, metalness:0});
@@ -350,13 +374,13 @@
     M.plume  = new THREE.MeshStandardMaterial({color:col(0xe6d8bd), roughness:1});
     M.soil   = new THREE.MeshStandardMaterial({color:col(0x1c130c), roughness:1});
     M.curtain = new THREE.MeshStandardMaterial({color:col(0xe6dfd0), roughness:1, transparent:true, opacity:0.5, side:THREE.DoubleSide, depthWrite:false});
-    M.mirror = new THREE.MeshStandardMaterial({color:col(0xaab6cc), metalness:1, roughness:0.05});
+    M.mirror = new THREE.MeshStandardMaterial({color:col(0xe6eefb), metalness:0.85, roughness:0.08, emissive:col(0x7ea2d8), emissiveIntensity:0.38, envMapIntensity:1.8});
     M.blackFrame = withUV(new THREE.MeshStandardMaterial({color:col(0x14171f), roughness:0.5, metalness:0.2}), 1, false);
 
     var fabCache = {};
     function fab(hex){
       if(!fabCache[hex]){
-        var m = new THREE.MeshStandardMaterial({map:fabricTex, bumpMap:fabricTex, bumpScale:0.5, color:col(hex), roughness:0.95, metalness:0});
+        var m = new THREE.MeshStandardMaterial({map:fabricTex, bumpMap:fabricTex, bumpScale:0.4, color:col(hex), roughness:0.95, metalness:0});
         m.userData = {uv:1.2, wood:false}; fabCache[hex] = m;
       }
       return fabCache[hex];
@@ -840,9 +864,9 @@
       art.position.z = 0.028; g.add(art);
       return g;
     }
-    var bigArt = artFrame(1.9, 1.2, artBigCanvas(sz(768), sz(486)), M.oak);
+    var bigArt = artFrame(1.9, 1.2, artBigCanvas(sz(768), sz(486)), M.blackFrame);
     bigArt.position.set(0, 2.05, WALL_Z + 0.115); room.add(bigArt);
-    var art2 = artFrame(0.62, 0.86, artArchesCanvas(sz(320), sz(440), ['#c2603a','#24365a','#c9a15a'], 8), M.blackFrame);
+    var art2 = artFrame(0.62, 0.86, artArchesCanvas(sz(320), sz(440), ['#1c1e22','#9a9da1','#e2e3e1'], 8), M.blackFrame);
     art2.position.set(-2.6, 1.85, WALL_Z + 0.115); room.add(art2);
 
     /* luz de galería sobre el cuadro principal */
@@ -1003,7 +1027,7 @@
     key.position.set(4.5, 7.5, 5.5);
     key.castShadow = SHADOWS;
     if(SHADOWS){
-      key.shadow.mapSize.set(2048, 2048);
+      key.shadow.mapSize.set(1536, 1536);
       key.shadow.camera.left = -8; key.shadow.camera.right = 8;
       key.shadow.camera.top = 7; key.shadow.camera.bottom = -4;
       key.shadow.camera.near = 1; key.shadow.camera.far = 24;

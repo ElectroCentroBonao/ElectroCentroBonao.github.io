@@ -1,0 +1,112 @@
+/* POLISH.CSS — refinamientos sobre la estética original (azul marino + rojo del logo). Cargar al final. */
+:focus-visible{outline:2px solid var(--blue-400);outline-offset:3px;border-radius:6px}
+.btn{border-radius:999px;padding:13px 26px}
+.btn-primary{box-shadow:0 12px 26px -14px rgba(214,58,42,.8)}
+/* hexágonos: eco del logo */
+.cat-card svg,.why-item .ico{clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)}
+.cat-card svg{width:52px;height:52px;padding:14px;margin-bottom:20px;color:#fff;background:linear-gradient(135deg,var(--red-600),var(--red-500))}
+.why-item .ico{border:0;border-radius:0;background:linear-gradient(135deg,var(--blue-600),var(--blue-400))}
+.why-item .ico svg{color:#fff}
+.cat-card{box-shadow:inset 0 2px 0 transparent}
+.cat-card:hover{box-shadow:inset 0 2px 0 var(--red-500)}
+.gal-item{cursor:zoom-in}
+.gal-item:hover{border-color:var(--blue-400)}
+/* entrada del hero: un solo momento orquestado */
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes swash{to{background-size:100% 100%}}
+.hero>div>*{animation:rise .9s var(--ease) both}
+.hero>div>:nth-child(2){animation-delay:.08s}.hero>div>:nth-child(3){animation-delay:.18s}
+.hero>div>:nth-child(4){animation-delay:.3s}.hero>div>:nth-child(5){animation-delay:.42s}.hero>div>:nth-child(6){animation-delay:.54s}
+.hero h1 em{background:linear-gradient(transparent 86%,var(--red-500) 86% 94%,transparent 94%) 0 0/0% 100% no-repeat;animation:swash 1s .9s var(--ease) forwards}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;background:linear-gradient(90deg,var(--red-500),var(--blue-400));transform-origin:0 50%;transform:scaleX(0)}
+.lightbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(10,14,24,.94);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+.lightbox.open{opacity:1;pointer-events:auto}
+.lightbox img{max-height:90vh;border-radius:var(--radius);transform:scale(.94);transition:transform .45s var(--ease)}
+.lightbox.open img{transform:none}
+.lightbox button{position:absolute;top:18px;right:22px;font-size:2.2rem;line-height:1;color:var(--cream)}
+
+/* legibilidad sobre la pared blanca */
+.vignette{background:linear-gradient(90deg,rgba(10,14,24,.72) 0,rgba(10,14,24,.4) 40%,transparent 70%),radial-gradient(ellipse at center,rgba(10,14,24,.25) 30%,rgba(10,14,24,.6) 78%,rgba(10,14,24,.94) 100%)}
+
+/* ===== tipografía: Fraunces (títulos, con cursiva) + DM Sans ===== */
+:root{--font-head:'Fraunces',Georgia,serif;--font-body:'DM Sans',system-ui,sans-serif}
+h1,h2,h3,.brand-name,.rating-card .big{font-variation-settings:'SOFT' 100,'WONK' 1;font-weight:600;letter-spacing:-.02em}
+.hero h1{font-size:clamp(2.3rem,5.4vw,4.3rem);max-width:15ch;line-height:1.04}
+.hero h1 em{font-style:italic;font-weight:500}
+.kicker,.rev-src{font-family:var(--font-body);font-weight:600;letter-spacing:.18em;font-size:.72rem}
+.cat-card h3,.why-item h3{font-size:1.2rem}
+/* ===== ambiente: luz que respira ===== */
+.aurora{position:fixed;inset:-15%;z-index:1;pointer-events:none;
+  background:radial-gradient(40vmax 40vmax at 14% 22%,rgba(214,58,42,.17),transparent 62%),radial-gradient(46vmax 46vmax at 86% 72%,rgba(74,114,209,.2),transparent 62%);
+  animation:drift 20s ease-in-out infinite alternate;will-change:transform}
+@keyframes drift{to{transform:translate3d(4%,-3%,0) scale(1.08)}}
+.marquee{position:relative;z-index:2;overflow:hidden;padding:18px 0;border-block:1px solid var(--line-soft);background:rgba(10,14,24,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mq-track{display:flex;width:max-content;animation:mq 40s linear infinite}
+.mq-group{display:flex;flex-shrink:0}
+.mq-group span{display:flex;align-items:center;gap:28px;padding-right:28px;white-space:nowrap;font-family:var(--font-head);font-style:italic;font-size:clamp(1.1rem,2.4vw,1.5rem)}
+.mq-group span::after{content:'';width:13px;height:15px;background:var(--red-500);clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.cat-grid:not(.in) .cat-card{opacity:0}
+.cat-grid.in .cat-card{animation:rise .8s var(--ease) backwards}
+.cat-card:nth-child(2){animation-delay:.08s!important}.cat-card:nth-child(3){animation-delay:.16s!important}
+.cat-card:nth-child(4){animation-delay:.24s!important}.cat-card:nth-child(5){animation-delay:.32s!important}.cat-card:nth-child(6){animation-delay:.4s!important}
+.cat-card,.rev-card,.loc-card,.rating-card{position:relative;overflow:hidden}
+.cat-card::before,.rev-card::before,.loc-card::before,.rating-card::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s var(--ease);background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),rgba(74,114,209,.2),transparent 70%)}
+.cat-card:hover::before,.rev-card:hover::before,.loc-card:hover::before,.rating-card:hover::before{opacity:1}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%)}
+.btn-primary:hover::after{transform:translateX(120%);transition:transform .7s var(--ease)}
+/* ===== WhatsApp flotante: solo cuando no se ve el botón grande ===== */
+.floating-social{right:22px;bottom:calc(22px + env(safe-area-inset-bottom,0px));opacity:0;visibility:hidden;transform:translateY(16px) scale(.92);transition:opacity .35s var(--ease),transform .35s var(--ease),visibility 0s .35s}
+.floating-social.show{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.floating-social a.fs-wa{position:relative;width:auto;height:56px;padding:0 24px 0 18px;gap:10px;border-radius:999px;color:#fff;font-weight:600;font-size:.92rem}
+.fs-wa::before{content:'';position:absolute;inset:0;border-radius:inherit;background:#25D366;z-index:-1;opacity:.5;animation:ring 2.6s ease-out infinite}
+@keyframes ring{to{transform:scale(1.35,1.7);opacity:0}}
+.floating-social .fs-wa svg{width:26px;height:26px}
+/* ===== celular ===== */
+@media(max-width:899px){
+  .floating-social{right:calc(16px + env(safe-area-inset-right,0px))}
+  .floating-social a.fs-wa{width:58px;height:58px;padding:0;justify-content:center}.fs-label{display:none}
+  .vignette{background:radial-gradient(ellipse at center,rgba(10,14,24,.5) 20%,rgba(10,14,24,.8) 80%,rgba(10,14,24,.94) 100%)}
+}
+@media(max-width:560px){
+  .hero{min-height:100svh;padding-bottom:40px}
+  .hero h1{font-size:clamp(2.1rem,9.6vw,2.8rem)}
+  .hero p.lead{font-size:1rem;margin-top:20px}
+  .hero-actions{flex-direction:column;gap:12px;margin-top:30px}
+  .hero-actions .btn{width:100%;justify-content:center}
+  .trust-row{gap:12px 20px;margin-top:34px;padding-top:24px}
+  .marquee{padding:14px 0}
+}
+@media(prefers-reduced-motion:reduce){.aurora,.mq-track,.fs-wa::before{animation:none!important}}
+
+/* ===== tarjeta de contacto ===== */
+.hero{gap:48px}
+.hero>div{flex:1 1 0}
+.contact-card{flex:0 0 clamp(290px,28vw,350px);position:relative;padding:34px 26px 28px;text-align:center;border-radius:30px;
+  background:radial-gradient(120% 90% at 18% 0%,rgba(42,60,112,.96) 0%,rgba(20,31,60,.95) 55%,rgba(12,18,38,.97) 100%);
+  border:2px solid var(--red-500);
+  box-shadow:inset 0 0 0 5px #101828,inset 0 0 0 6px rgba(243,237,224,.22),0 0 0 7px rgba(243,237,224,.05),0 34px 60px -26px rgba(0,0,0,.85);
+  transform:rotate(-3deg);transition:transform .6s var(--ease);
+  animation:cardIn 1s .5s var(--ease) backwards,bob 6s 1.6s ease-in-out infinite alternate}
+.contact-card:hover{transform:rotate(0)}
+@keyframes cardIn{from{opacity:0;transform:translateY(34px) rotate(-9deg)}}
+@keyframes bob{to{translate:0 -10px}}
+.cc-logo{width:104px;height:104px;margin:0 auto 14px;border-radius:50%;box-shadow:0 0 0 4px rgba(243,237,224,.14),0 14px 30px -10px rgba(0,0,0,.75)}
+.cc-name{font-family:var(--font-head);font-variation-settings:'SOFT' 100,'WONK' 1;font-weight:700;font-size:1.6rem;line-height:1.1;letter-spacing:-.02em}
+.cc-tag{margin-top:8px;font-size:.9rem;font-weight:600;color:var(--cream-dim)}
+.cc-social{display:flex;justify-content:center;gap:14px;margin:22px 0 20px}
+.cc-social a{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.cc-social a:hover,.cc-social a:focus-visible{transform:translateY(-5px) scale(1.08)}
+.cc-social svg{width:26px;height:26px;color:#fff}
+.cc-wa{background:#25D366}.cc-wa:hover{box-shadow:0 12px 24px -8px rgba(37,211,102,.7)}
+.cc-ig{background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4)}.cc-ig:hover{box-shadow:0 12px 24px -8px rgba(221,42,123,.7)}
+.cc-fb{background:#1877F2}.cc-fb:hover{box-shadow:0 12px 24px -8px rgba(24,119,242,.7)}
+.cc-slogan{font-family:var(--font-head);font-style:italic;font-size:1.08rem;line-height:1.3;color:var(--cream)}
+.cc-meta{margin-top:12px;font-size:.82rem;color:var(--steel)}
+@media(max-width:899px){
+  .hero{flex-direction:column;align-items:stretch;gap:0}
+  .hero>div{flex:none;width:100%}
+  .contact-card{flex:none;width:100%;max-width:420px;margin:40px auto 0;transform:none;animation:rise .9s .5s var(--ease) backwards}
+}
+@media(prefers-reduced-motion:reduce){.contact-card{animation:none!important}}
