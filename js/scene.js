@@ -1081,10 +1081,19 @@
       tpx = (e.clientX / W)*2 - 1; tpy = (e.clientY / H)*2 - 1;
     }, {passive:true});
 
+    if(isMobile && !reduceMotion && window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== 'function'){
+      window.addEventListener('deviceorientation', function(e){
+        if(e.gamma == null || e.beta == null) return;
+        tpx = clamp(e.gamma/25, -1, 1); tpy = clamp((e.beta - 55)/25, -1, 1);
+      }, {passive:true});
+    }
+
     /* ============================================================
        BUCLE DE ANIMACIÓN
        ============================================================ */
     var clock = new THREE.Clock(), elapsed = 0, raf = 0, frames = 0, accDt = 0, degraded = 0;
+    var lastAct = performance.now(), lastDraw = 0;
+    ['scroll','pointermove','pointerdown','touchstart','touchmove'].forEach(function(ev){ window.addEventListener(ev, function(){ lastAct = performance.now(); }, {passive:true}); });
 
     function degrade(){
       degraded++;
@@ -1097,6 +1106,10 @@
 
     function frame(){
       raf = requestAnimationFrame(frame);
+      if(window.__sceneHold){ clock.getDelta(); return; }
+      var now = performance.now(), idle = isMobile && (now - lastAct) > 2500;
+      if(idle && now - lastDraw < 28) return;
+      lastDraw = now;
       var rawDt = clock.getDelta();
       var dt = Math.min(rawDt, 0.05);
       elapsed += dt; var t = elapsed;
@@ -1134,7 +1147,7 @@
       renderer.render(scene, camera);
 
       if(++frames > 120){
-        accDt += rawDt;
+        if(!idle) accDt += rawDt;
         if(frames % 90 === 0){
           if(accDt/90 > 0.032 && degraded < 3) degrade();
           accDt = 0;

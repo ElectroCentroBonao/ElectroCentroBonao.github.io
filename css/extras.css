@@ -73,3 +73,16 @@
 @media(max-width:700px){.lb-nav{width:44px;height:44px;top:auto;bottom:14px;margin:0}.lb-prev{left:18px}.lb-next{right:18px}}
 @media(hover:hover){.btn-primary{will-change:transform}}
 @media(prefers-reduced-motion:reduce){.open-pill::before{animation:none}}
+/* ===== vida: brillo de cursor, hexágonos flotantes, ripple táctil ===== */
+.cursor-glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s;background:radial-gradient(circle,rgba(74,114,209,.16),rgba(214,58,42,.05) 45%,transparent 70%);will-change:transform}
+.cursor-glow.on{opacity:1}
+.hexes{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.hexes i{position:absolute;left:var(--x);bottom:-60px;width:var(--s);height:calc(var(--s)*1.1);background:var(--c);opacity:0;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%);animation:hexUp var(--d) linear var(--dl) infinite}
+@keyframes hexUp{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}10%{opacity:.16}85%{opacity:.1}100%{transform:translate3d(var(--dx),-115vh,0) rotate(200deg);opacity:0}}
+.ripple{position:fixed;z-index:55;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;pointer-events:none;border:2px solid rgba(243,237,224,.55);background:rgba(214,58,42,.25);animation:rip .7s var(--ease) forwards}
+@keyframes rip{to{transform:scale(7);opacity:0}}
+.stat b{transition:transform .4s var(--ease)}.stat:hover b{transform:translateY(-4px) scale(1.04)}
+.rev-stars{background:linear-gradient(100deg,var(--red-500) 40%,#ffd6a0 50%,var(--red-500) 60%) 200% 0/250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:glint 4.5s ease-in-out infinite}
+@keyframes glint{to{background-position:-100% 0}}
+@media(max-width:700px){.hexes i:nth-child(n+6){display:none}.cursor-glow{display:none}}
+@media(prefers-reduced-motion:reduce){.hexes,.cursor-glow,.ripple{display:none}.rev-stars{animation:none}}

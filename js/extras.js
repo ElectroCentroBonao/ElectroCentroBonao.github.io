@@ -75,3 +75,29 @@
     lb.addEventListener('touchend',function(e){var d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>50)show(cur+(d<0?1:-1))},{passive:true});
   }
 })();
+
+/* ---- vida + rendimiento: pausa del 3D, brillo de cursor, hexágonos, ripple ---- */
+(function(){
+  var lb=document.querySelector('.lightbox'),mp=document.getElementById('mobile-panel');
+  function hold(){window.__sceneHold=!!((lb&&lb.classList.contains('open'))||(mp&&mp.classList.contains('open')))}
+  var mo=new MutationObserver(hold);[lb,mp].forEach(function(e){e&&mo.observe(e,{attributes:true,attributeFilter:['class']})});
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  var hx=document.createElement('div');hx.className='hexes';hx.setAttribute('aria-hidden','true');
+  var cols=['var(--red-500)','var(--blue-400)','var(--cream)'];
+  for(var i=0;i<9;i++){var h=document.createElement('i'),st=h.style;
+    st.setProperty('--x',(6+i*10.5+Math.random()*4)+'%');st.setProperty('--s',(16+Math.random()*30)+'px');
+    st.setProperty('--c',cols[i%3]);st.setProperty('--d',(24+Math.random()*22)+'s');st.setProperty('--dl',(-Math.random()*40)+'s');
+    st.setProperty('--dx',((Math.random()-.5)*160)+'px');hx.appendChild(h)}
+  document.body.appendChild(hx);
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches){
+    var g=document.createElement('div');g.className='cursor-glow';g.setAttribute('aria-hidden','true');document.body.appendChild(g);
+    var gx=innerWidth/2,gy=innerHeight/2,tx=gx,ty=gy,run=false;
+    function loop(){gx+=(tx-gx)*.12;gy+=(ty-gy)*.12;g.style.transform='translate3d('+gx+'px,'+gy+'px,0)';
+      if(Math.abs(tx-gx)+Math.abs(ty-gy)>.5&&!document.hidden)requestAnimationFrame(loop);else run=false}
+    addEventListener('pointermove',function(e){tx=e.clientX;ty=e.clientY;g.classList.add('on');if(!run){run=true;requestAnimationFrame(loop)}},{passive:true});
+    document.addEventListener('pointerleave',function(){g.classList.remove('on')});
+  }else{
+    addEventListener('pointerdown',function(e){var r=document.createElement('span');r.className='ripple';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';
+      document.body.appendChild(r);r.addEventListener('animationend',function(){r.remove()})},{passive:true});
+  }
+})();
