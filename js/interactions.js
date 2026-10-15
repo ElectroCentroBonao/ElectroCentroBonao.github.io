@@ -1,77 +1,79 @@
-/* ==========================================================================
-   Talleres Juma — interactions.js
-   Barra de progreso, scroll-reveal, nav móvil, smooth scroll, año footer
-   ========================================================================== */
-
-(function () {
-  "use strict";
-
-  // ---------- Año dinámico en footer ----------
-  var yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  // ---------- Barra de progreso de scroll ----------
-  var progressBar = document.getElementById("progressBar");
-  var nav = document.getElementById("nav");
-
-  function updateOnScroll() {
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
-    if (progressBar) progressBar.style.width = pct + "%";
-    if (nav) nav.classList.toggle("scrolled", window.scrollY > 30);
-  }
-  window.addEventListener("scroll", updateOnScroll, { passive: true });
-  updateOnScroll();
-
-  // ---------- Scroll reveal ----------
-  var revealEls = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window && revealEls.length) {
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
-    );
-    revealEls.forEach(function (el) {
-      observer.observe(el);
+/* ============================================================
+   INTERACTIONS.JS — menú móvil, scroll-reveal, toast de ayuda
+   ============================================================ */
+(function(){
+  var burger = document.getElementById('burger');
+  var panel = document.getElementById('mobile-panel');
+  if(burger && panel){
+    burger.addEventListener('click', function(){
+      var open = panel.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open);
     });
-  } else {
-    revealEls.forEach(function (el) {
-      el.classList.add("is-visible");
+    panel.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ panel.classList.remove('open'); burger.setAttribute('aria-expanded','false'); });
     });
   }
 
-  // ---------- Nav móvil ----------
-  var navToggle = document.getElementById("navToggle");
-  if (navToggle && nav) {
-    navToggle.addEventListener("click", function () {
-      var isOpen = nav.classList.toggle("open");
-      navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      navToggle.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
-    });
-
-    document.querySelectorAll(".nav-links a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        nav.classList.remove("open");
-        navToggle.setAttribute("aria-expanded", "false");
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
       });
-    });
+    }, {threshold:0.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
   }
 
-  // ---------- Smooth scroll para enlaces internos ----------
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    link.addEventListener("click", function (e) {
-      var id = link.getAttribute("href");
-      if (id.length < 2) return;
-      var target = document.querySelector(id);
-      if (!target) return;
-      e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+  var toast = document.getElementById('toast');
+  var toastTimer;
+  window.showToast = function(msg){
+    if(!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+  };
+})();
+
+/* ---- extras: progreso de scroll, visor de galería, año ---- */
+(function(){
+  var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
+  var bar=document.createElement('div'); bar.className='progress'; bar.setAttribute('aria-hidden','true'); document.body.appendChild(bar);
+  var tick=false;
+  function upd(){ var m=document.documentElement.scrollHeight-innerHeight; bar.style.transform='scaleX('+(m>0?scrollY/m:0)+')'; tick=false; }
+  addEventListener('scroll',function(){ if(!tick){ tick=true; requestAnimationFrame(upd); } },{passive:true});
+  var lb=document.createElement('div'); lb.className='lightbox'; lb.innerHTML='<img alt=""><button aria-label="Cerrar">×</button>'; document.body.appendChild(lb);
+  var li=lb.querySelector('img');
+  function close(){ lb.classList.remove('open'); }
+  document.querySelectorAll('.gal-item').forEach(function(it){
+    it.tabIndex=0; it.setAttribute('role','button');
+    function open(){ var im=it.querySelector('img'); li.src=im.src; li.alt=im.alt; lb.classList.add('open'); }
+    it.addEventListener('click',open);
+    it.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+  });
+  lb.addEventListener('click',close);
+  addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+})();
+
+/* ---- WhatsApp flotante + brillo que sigue al cursor ---- */
+(function(){
+  var fl=document.getElementById('wa-float');
+  if(fl){
+    if('IntersectionObserver' in window){
+      var seen=new Set();
+      var o=new IntersectionObserver(function(es){
+        es.forEach(function(e){ if(e.isIntersecting) seen.add(e.target); else seen.delete(e.target); });
+        fl.classList.toggle('show', seen.size===0);
+      },{rootMargin:'0px 0px -90px 0px'});
+      document.querySelectorAll('main a.btn-primary[href*="wa.me"]').forEach(function(b){ o.observe(b); });
+    } else fl.classList.add('show');
+  }
+  document.querySelectorAll('.cat-card,.rev-card,.loc-card,.rating-card').forEach(function(el){
+    el.addEventListener('pointermove',function(e){
+      var r=el.getBoundingClientRect();
+      el.style.setProperty('--mx',(e.clientX-r.left)+'px'); el.style.setProperty('--my',(e.clientY-r.top)+'px');
     });
   });
 })();
