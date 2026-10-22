@@ -103,3 +103,14 @@ html[data-fx="lite"].fx-low .ls-hex{display:none}
 
 /* en pantallas verticales la sala se corre para que se vea la ventana y el sofá, no el borde de la lámpara */
 @media(max-aspect-ratio:4/5){.ls-room-in{transform:translateX(-14%)}}
+
+/* ================ 3D en celulares: el blur sobre un canvas vivo se recalcula en cada cuadro ================
+   Es lo más pesado que había sobre el 3D en pantallas táctiles; se cambia por fondo sólido (casi igual a la vista). */
+@media(pointer:coarse),(max-width:899px){
+  html[data-fx="full"]{--surface:rgba(14,19,32,.88)}
+  html[data-fx="full"] nav,html[data-fx="full"] .rating-card,html[data-fx="full"] .rev-card,html[data-fx="full"] .loc-card,
+  html[data-fx="full"] .offer,html[data-fx="full"] footer,html[data-fx="full"] .marquee,html[data-fx="full"] .toast,
+  html[data-fx="full"] .lightbox{-webkit-backdrop-filter:none;backdrop-filter:none}
+  html[data-fx="full"] footer{background:rgba(8,11,19,.92)}
+  html[data-fx="full"] .marquee{background:rgba(10,14,24,.8)}
+}

@@ -26,17 +26,22 @@
 (function(){
   'use strict';
   var d = document, root = d.documentElement, W = window, N = navigator;
-  var KEY = 'ecb-fx', LOWKEY = 'ecb-fxlow', TTL = 7 * 864e5;
+  var KEY = 'ecb-fx2', LOWKEY = 'ecb-fxlow', TTL = 3 * 864e5;   // KEY nueva: ignora marcas viejas
   var THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
   var SCENE_URL = 'js/scene.js';
   /* umbrales ajustables */
-  var LIMITS = { cpuMs: 28, minTex: 4096 };
+  var LIMITS = { cpuMs: 45, minTex: 4096, strikes: 2 };
 
   function mq(q){ try{ return W.matchMedia(q).matches; }catch(e){ return false; } }
   function lsGet(k){ try{ return W.localStorage.getItem(k); }catch(e){ return null; } }
   function lsSet(k,v){ try{ W.localStorage.setItem(k,v); }catch(e){} }
   function lsDel(k){ try{ W.localStorage.removeItem(k); }catch(e){} }
   function fresh(k){ var n = +lsGet(k); return n > 0 && Date.now() - n < TTL; }
+  /* "strikes": veces que el 3D se rindió por lag. Hacen falta 2 (en visitas distintas) para recordar el modo ligero */
+  function strikes(){
+    try{ var o = JSON.parse(lsGet(KEY) || 'null'); if(o && o.n && Date.now() - o.t < TTL) return o.n; }catch(e){}
+    return 0;
+  }
 
   var qs = { get: function(){ return null; } };
   try{ qs = new URLSearchParams(W.location.search); }catch(e){}
@@ -50,7 +55,7 @@
   function staticReason(){
     if(conn.saveData) return 'ahorro-de-datos';
     if(mq('(prefers-reduced-data:reduce)')) return 'ahorro-de-datos';
-    if(/^(slow-2g|2g|3g)$/.test(conn.effectiveType || '')) return 'red-lenta';
+    if(/^(slow-2g|2g)$/.test(conn.effectiveType || '')) return 'red-lenta';
     if(N.deviceMemory && N.deviceMemory <= 2) return 'poca-ram';
     if(N.hardwareConcurrency && N.hardwareConcurrency <= 2) return 'pocos-nucleos';
     if(mobile && N.deviceMemory && N.deviceMemory <= 3 && N.hardwareConcurrency && N.hardwareConcurrency <= 4) return 'gama-baja';
@@ -62,7 +67,7 @@
   else{
     var why = staticReason();
     if(why){ tier = 'lite'; reason = why; }
-    else if(fresh(KEY)){ tier = 'lite'; reason = 'recordado'; }
+    else if(strikes() >= LIMITS.strikes){ tier = 'lite'; reason = 'recordado'; }
   }
 
   var FX = W.ECB_FX = {
@@ -81,7 +86,7 @@
       d.body.appendChild(h);
     }
     h.textContent = 'fx:' + FX.tier + (FX.low ? '+low' : '') + ' · 3d:' + FX.scene + (FX.reason ? ' · ' + FX.reason : '') +
-      (FX.info.cpu ? ' · cpu ' + FX.info.cpu + 'ms' : '') + (FX.info.fps ? ' · ' + FX.info.fps + 'fps' : '') + (FX.info.gpu ? ' · ' + FX.info.gpu : '');
+      (FX.info.cpu ? ' · cpu ' + FX.info.cpu + 'ms' : '') + ' · strikes ' + strikes() + (FX.info.fps ? ' · ' + FX.info.fps + 'fps' : '') + (FX.info.gpu ? ' · ' + FX.info.gpu : '');
   }
   function apply(){
     root.setAttribute('data-fx', FX.tier);
@@ -95,9 +100,14 @@
     if(FX.tier === 'lite') return;
     if(FX.forced && why !== 'error' && why !== 'sin-three') return;
     FX.tier = 'lite'; FX.scene = 'off'; FX.reason = why;
-    if(why !== 'error' && why !== 'sin-three' && !FX.forced) lsSet(KEY, String(Date.now()));
+    /* solo el lag real cuenta como strike; fallos de red, contexto perdido, etc. no se recuerdan */
+    if(!FX.forced && (why === 'lag' || why === 'muy-lento' || why === 'escena-lenta')){
+      lsSet(KEY, JSON.stringify({ n: strikes() + 1, t: Date.now() }));
+    }
     apply();
   };
+  /* el 3D corrió fluido un buen rato: se perdona cualquier strike anterior */
+  FX.stable = function(){ lsDel(KEY); };
   /* modo ligero "bajo": también apaga las animaciones decorativas infinitas */
   FX.lower = function(why){
     if(FX.low) return;
@@ -151,8 +161,11 @@
     s.src = SCENE_URL; s.async = true;
     s.onerror = function(){ FX.fallback('error'); };
     d.body.appendChild(s);
-    /* vigilante: si en 25 s el 3D no arrancó, se queda el modo ligero */
-    W.setTimeout(function(){ if(FX.tier === 'full' && FX.scene !== 'on') FX.fallback('timeout'); }, 25000);
+    /* vigilante: si tras 25 s VISIBLES el 3D no arrancó, se queda el modo ligero (no se recuerda) */
+    var vis = 0, iv = W.setInterval(function(){
+      if(FX.tier !== 'full' || FX.scene === 'on'){ W.clearInterval(iv); return; }
+      if(!d.hidden && ++vis >= 25){ W.clearInterval(iv); FX.fallback('timeout'); }
+    }, 1000);
   }
   function loadThree(){
     var s = d.createElement('script');

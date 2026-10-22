@@ -18,7 +18,7 @@
 (function(){
   'use strict';
   try{
-    var FX = window.ECB_FX || null, T0 = performance.now(), BUILD_LIMIT = 3200;
+    var FX = window.ECB_FX || null, T0 = performance.now(), BUILD_LIMIT = 7000;
     var canvas = document.getElementById('scene-canvas');
     if(FX && FX.tier === 'lite') return;
     if(!window.THREE || !canvas){ if(FX) FX.fallback('sin-three'); return; }
@@ -1094,14 +1094,14 @@
        BUCLE DE ANIMACIÓN
        ============================================================ */
     var clock = new THREE.Clock(), elapsed = 0, raf = 0, frames = 0, accDt = 0, degraded = 0;
-    var accN = 0, warm = 0, slowEv = 0, vslow = 0, dead = false;
+    var accN = 0, warm = 0, slowEv = 0, vslow = 0, okWin = 0, stableSent = false, win = [], dead = false;
     var lastAct = performance.now(), lastDraw = 0;
     ['scroll','pointermove','pointerdown','touchstart','touchmove','wheel','keydown'].forEach(function(ev){ window.addEventListener(ev, function(){ lastAct = performance.now(); }, {passive:true}); });
 
     function setDpr(v){ dpr = v; renderer.setPixelRatio(dpr); renderer.setSize(W, H); }
     /* baja calidad por pasos: resolución -> sombras -> resolución mínima */
     function degrade(){
-      degraded++; accDt = 0; accN = 0; warm = 10;
+      degraded++; accDt = 0; accN = 0; win.length = 0; warm = 12;
       if(degraded === 1){ setDpr(dpr > 1 ? Math.max(1, dpr - 0.5) : 0.85); }
       else if(degraded === 2){
         if(SHADOWS && renderer.shadowMap.enabled){
@@ -1180,14 +1180,20 @@
       if(frames > 40 && !idle && !document.hidden){
         if(warm > 0){ warm--; }
         else{
-          accDt += Math.min(rawDt, 0.25); accN++;
-          if(accN >= 45){
-            var avg = accDt / accN; accDt = 0; accN = 0;
-            if(avg > 0.038){
+          win.push(Math.min(rawDt, 0.25));
+          if(win.length >= 60){
+            var sorted = win.slice().sort(function(a, b){ return a - b; });
+            var avg = sorted[sorted.length >> 1]; win.length = 0;       // mediana de la ventana
+            if(avg > 0.042){
+              okWin = 0;
               if(degraded < 3) degrade();
-              else if(FX && !FX.forced && ++slowEv >= 2){ bail('lag'); return; }
-            }else if(slowEv > 0) slowEv--;
-            if(avg > 0.075 && FX && !FX.forced && ++vslow >= 2){ bail('muy-lento'); return; }
+              else if(FX && !FX.forced && ++slowEv >= 3){ bail('lag'); return; }
+            }else{
+              if(slowEv > 0) slowEv--;
+              /* ~6 ventanas seguidas fluidas = el 3D anda bien: se borra cualquier "strike" anterior */
+              if(++okWin >= 6 && !stableSent){ stableSent = true; if(FX && FX.stable) FX.stable(); }
+            }
+            if(avg > 0.085 && FX && !FX.forced && ++vslow >= 3){ bail('muy-lento'); return; }
           }
         }
       }
@@ -1200,11 +1206,17 @@
     document.addEventListener('visibilitychange', function(){
       if(dead) return;
       if(document.hidden){ cancelAnimationFrame(raf); raf = 0; }
-      else if(!raf){ clock.getDelta(); accDt = 0; accN = 0; warm = 10; frame(); }
+      else if(!raf){ clock.getDelta(); accDt = 0; accN = 0; win.length = 0; warm = 12; frame(); }
     });
     canvas.addEventListener('webglcontextlost', function(e){
       e.preventDefault(); cancelAnimationFrame(raf); raf = 0;
-      setTimeout(function(){ if(!raf && !dead) bail('contexto-perdido'); }, 4000);
+      (function wait(){
+        setTimeout(function(){
+          if(raf || dead) return;                       // ya se restauró
+          if(document.hidden){ wait(); return; }        // sigue en segundo plano: esperar
+          bail('contexto-perdido');
+        }, 6000);
+      })();
     });
     canvas.addEventListener('webglcontextrestored', function(){ if(!raf){ clock.getDelta(); frame(); } });
 
