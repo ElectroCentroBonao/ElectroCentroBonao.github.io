@@ -18,8 +18,10 @@
 (function(){
   'use strict';
   try{
+    var FX = window.ECB_FX || null, T0 = performance.now(), BUILD_LIMIT = 3200;
     var canvas = document.getElementById('scene-canvas');
-    if(!window.THREE || !canvas) return;
+    if(FX && FX.tier === 'lite') return;
+    if(!window.THREE || !canvas){ if(FX) FX.fallback('sin-three'); return; }
     var THREE = window.THREE;
 
     /* ---------- capacidades del dispositivo ---------- */
@@ -33,8 +35,8 @@
     function sz(n){ return Math.max(64, Math.round(n * Q)); }
 
     /* ---------- renderer ---------- */
-    var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:!isMobile, alpha:true, powerPreference:'high-performance'});
     var dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.75);
+    var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:!isMobile && dpr < 1.5, alpha:true, powerPreference:'high-performance'});
     renderer.setPixelRatio(dpr);
     renderer.setSize(W, H);
     renderer.outputEncoding = THREE.sRGBEncoding;
@@ -1092,22 +1094,48 @@
        BUCLE DE ANIMACIÓN
        ============================================================ */
     var clock = new THREE.Clock(), elapsed = 0, raf = 0, frames = 0, accDt = 0, degraded = 0;
+    var accN = 0, warm = 0, slowEv = 0, vslow = 0, dead = false;
     var lastAct = performance.now(), lastDraw = 0;
-    ['scroll','pointermove','pointerdown','touchstart','touchmove'].forEach(function(ev){ window.addEventListener(ev, function(){ lastAct = performance.now(); }, {passive:true}); });
+    ['scroll','pointermove','pointerdown','touchstart','touchmove','wheel','keydown'].forEach(function(ev){ window.addEventListener(ev, function(){ lastAct = performance.now(); }, {passive:true}); });
 
+    function setDpr(v){ dpr = v; renderer.setPixelRatio(dpr); renderer.setSize(W, H); }
+    /* baja calidad por pasos: resolución -> sombras -> resolución mínima */
     function degrade(){
-      degraded++;
-      if(dpr > 1){ dpr = Math.max(1, dpr - 0.5); renderer.setPixelRatio(dpr); renderer.setSize(W, H); }
-      else if(SHADOWS && renderer.shadowMap.enabled){
-        renderer.shadowMap.enabled = false; key.castShadow = false;
-        scene.traverse(function(o){ if(o.material){ [].concat(o.material).forEach(function(m){ m.needsUpdate = true; }); } });
-      }
+      degraded++; accDt = 0; accN = 0; warm = 10;
+      if(degraded === 1){ setDpr(dpr > 1 ? Math.max(1, dpr - 0.5) : 0.85); }
+      else if(degraded === 2){
+        if(SHADOWS && renderer.shadowMap.enabled){
+          renderer.shadowMap.enabled = false; key.castShadow = false;
+          scene.traverse(function(o){ if(o.material){ [].concat(o.material).forEach(function(m){ m.needsUpdate = true; }); } });
+        }else setDpr(Math.max(0.7, dpr - 0.15));
+      }else{ setDpr(Math.max(0.6, dpr - 0.2)); }
     }
+    /* libera la GPU y quita el canvas: el modo ligero toma el relevo */
+    function teardown(){
+      if(dead) return; dead = true;
+      cancelAnimationFrame(raf); raf = 0;
+      try{
+        scene.traverse(function(o){
+          if(o.geometry && o.geometry.dispose) o.geometry.dispose();
+          if(o.material){ [].concat(o.material).forEach(function(m){
+            for(var k in m){ var v = m[k]; if(v && v.isTexture) v.dispose(); }
+            if(m.dispose) m.dispose();
+          }); }
+        });
+        if(scene.environment) scene.environment.dispose();
+        renderer.dispose();
+        if(renderer.forceContextLoss) renderer.forceContextLoss();
+      }catch(e){}
+      if(canvas.parentNode) canvas.parentNode.removeChild(canvas);
+    }
+    function bail(why){ teardown(); if(FX) FX.fallback(why); }
+    document.addEventListener('ecb:fx', function(){ if(FX && FX.tier === 'lite') teardown(); });
 
     function frame(){
+      if(dead) return;
       raf = requestAnimationFrame(frame);
       if(window.__sceneHold){ clock.getDelta(); return; }
-      var now = performance.now(), idle = isMobile && (now - lastAct) > 2500;
+      var now = performance.now(), idle = (now - lastAct) > (isMobile ? 2500 : 6000);
       if(idle && now - lastDraw < 28) return;
       lastDraw = now;
       var rawDt = clock.getDelta();
@@ -1145,23 +1173,39 @@
       }
 
       renderer.render(scene, camera);
+      frames++;
+      if(frames === 3 && FX) FX.ready();          // ya hay imagen: el fondo ligero hace fundido al 3D
 
-      if(++frames > 120){
-        if(!idle) accDt += rawDt;
-        if(frames % 90 === 0){
-          if(accDt/90 > 0.032 && degraded < 3) degrade();
-          accDt = 0;
+      /* vigilante de FPS (se ignoran los primeros cuadros, el reposo y la pestaña oculta) */
+      if(frames > 40 && !idle && !document.hidden){
+        if(warm > 0){ warm--; }
+        else{
+          accDt += Math.min(rawDt, 0.25); accN++;
+          if(accN >= 45){
+            var avg = accDt / accN; accDt = 0; accN = 0;
+            if(avg > 0.038){
+              if(degraded < 3) degrade();
+              else if(FX && !FX.forced && ++slowEv >= 2){ bail('lag'); return; }
+            }else if(slowEv > 0) slowEv--;
+            if(avg > 0.075 && FX && !FX.forced && ++vslow >= 2){ bail('muy-lento'); return; }
+          }
         }
       }
     }
     try{ renderer.compile(scene, camera); }catch(e){}
+    /* si solo armar la escena ya tardó demasiado, el dispositivo no da para 3D */
+    if(FX && !FX.forced && performance.now() - T0 > BUILD_LIMIT){ bail('escena-lenta'); return; }
     frame();
 
     document.addEventListener('visibilitychange', function(){
+      if(dead) return;
       if(document.hidden){ cancelAnimationFrame(raf); raf = 0; }
-      else if(!raf){ clock.getDelta(); frame(); }
+      else if(!raf){ clock.getDelta(); accDt = 0; accN = 0; warm = 10; frame(); }
     });
-    canvas.addEventListener('webglcontextlost', function(e){ e.preventDefault(); cancelAnimationFrame(raf); raf = 0; });
+    canvas.addEventListener('webglcontextlost', function(e){
+      e.preventDefault(); cancelAnimationFrame(raf); raf = 0;
+      setTimeout(function(){ if(!raf && !dead) bail('contexto-perdido'); }, 4000);
+    });
     canvas.addEventListener('webglcontextrestored', function(){ if(!raf){ clock.getDelta(); frame(); } });
 
     var rz = 0;
@@ -1178,5 +1222,6 @@
     });
   }catch(e){
     console.warn('Escena 3D no disponible:', e);
+    if(window.ECB_FX) window.ECB_FX.fallback('error');
   }
 })();

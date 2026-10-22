@@ -4,20 +4,96 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0e18">
+<script src="js/perf.js"></script>
 <title>Electro Centro Bonao — Electrodomésticos y muebles en Bonao, R.D.</title>
 <meta name="description" content="Electro Centro Bonao: electrodomésticos, muebles y financiamiento en Plaza Bonatica, Bonao. Lunes a sábado, 8:00 a.m. a 6:00 p.m.">
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,500..700,0..100,0..1;1,9..144,500..700,0..100,0..1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,500..700,0..100,0..1;1,9..144,500..700,0..100,0..1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,500..700,0..100,0..1;1,9..144,500..700,0..100,0..1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/reset.css">
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/animations.css">
 <link rel="stylesheet" href="css/polish.css">
 <link rel="stylesheet" href="css/extras.css">
+<link rel="stylesheet" href="css/fx.css">
+<noscript><style>.reveal{opacity:1;transform:none}.cat-grid:not(.in) .cat-card{opacity:1}</style></noscript>
 </head>
 <body>
+
+<div class="lite-stage" aria-hidden="true">
+  <div class="ls-hex"></div>
+  <div class="ls-room"><div class="ls-room-in">
+    <svg class="ls-art" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lsSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#25396f"/><stop offset="1" stop-color="#0f1834"/></linearGradient>
+        <linearGradient id="lsFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1628" stop-opacity="0"/><stop offset="1" stop-color="#131c32"/></linearGradient>
+        <linearGradient id="lsShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9a0"/><stop offset="1" stop-color="#ff9f5a"/></linearGradient>
+        <radialGradient id="lsMoon"><stop offset="0" stop-color="#f6f8ff"/><stop offset=".6" stop-color="#d2deff"/><stop offset="1" stop-color="#9db5f5"/></radialGradient>
+      </defs>
+      <rect y="770" width="1440" height="130" fill="url(#lsFloor)"/>
+      <path d="M0 770H1440" stroke="rgba(243,237,224,.06)"/>
+      <!-- cuadros hexagonales: eco del logo -->
+      <g fill="none" stroke="rgba(243,237,224,.13)" stroke-width="3">
+        <polygon transform="translate(236 330)" points="27.5,4.8 82.5,4.8 110,60.5 82.5,116.2 27.5,116.2 0,60.5" fill="rgba(209,61,39,.10)"/>
+        <polygon transform="translate(1196 250)" points="21,3.7 63,3.7 84,46 63,88.3 21,88.3 0,46" fill="rgba(74,114,209,.12)"/>
+      </g>
+      <!-- ventana -->
+      <g transform="translate(790 90)">
+        <rect width="340" height="400" rx="4" fill="url(#lsSky)" stroke="rgba(243,237,224,.18)" stroke-width="3"/>
+        <circle cx="236" cy="108" r="30" fill="url(#lsMoon)"/>
+        <g fill="#cfdcff" opacity=".7"><circle cx="60" cy="70" r="1.6"/><circle cx="120" cy="150" r="1.2"/><circle cx="150" cy="46" r="1.4"/><circle cx="290" cy="210" r="1.2"/><circle cx="90" cy="260" r="1.4"/><circle cx="200" cy="296" r="1.1"/></g>
+        <path d="M0 400V335Q60 292 120 322T240 312T340 300V400Z" fill="#0b1226"/>
+        <path d="M170 0V400M0 200H340" stroke="#0a0e18" stroke-width="10"/>
+      </g>
+      <g fill="rgba(243,237,224,.05)"><rect x="762" y="70" width="46" height="470" rx="6"/><rect x="1112" y="70" width="46" height="470" rx="6"/></g>
+      <g stroke="rgba(243,237,224,.06)" stroke-width="2"><path d="M776 80V530M790 80V530M1126 80V530M1140 80V530"/></g>
+      <!-- alfombra -->
+      <ellipse cx="720" cy="852" rx="440" ry="34" fill="rgba(181,42,29,.16)"/>
+      <ellipse cx="720" cy="852" rx="380" ry="26" fill="none" stroke="rgba(243,237,224,.08)"/>
+      <!-- sofá -->
+      <g fill="#121b30" stroke="rgba(111,150,255,.3)" stroke-width="2">
+        <rect x="470" y="600" width="520" height="160" rx="48"/>
+        <rect x="430" y="660" width="76" height="150" rx="32"/>
+        <rect x="954" y="660" width="76" height="150" rx="32"/>
+        <rect x="496" y="708" width="468" height="92" rx="26"/>
+      </g>
+      <path d="M730 712V796M604 712V796M858 712V796" stroke="rgba(243,237,224,.07)" stroke-width="2"/>
+      <path d="M470 810l-10 52M1010 810l10 52" stroke="#1d2a47" stroke-width="7" stroke-linecap="round"/>
+      <!-- lámpara de pie -->
+      <ellipse cx="360" cy="884" rx="62" ry="10" fill="#141d33"/>
+      <path d="M360 880V330Q360 204 470 204" fill="none" stroke="#2b3757" stroke-width="7" stroke-linecap="round"/>
+      <path d="M430 192H510L528 250H412Z" fill="url(#lsShade)"/>
+      <ellipse cx="470" cy="250" rx="58" ry="9" fill="#fff3d6" opacity=".9"/>
+      <!-- planta -->
+      <path d="M1150 800h60l-8 72h-44z" fill="#121b30" stroke="rgba(111,150,255,.22)" stroke-width="2"/>
+      <g fill="#0f2a2d" stroke="rgba(111,230,200,.2)" stroke-width="2">
+        <path d="M1180 800C1140 740 1130 690 1160 640C1192 696 1202 750 1180 800Z"/>
+        <path d="M1180 800C1230 750 1250 700 1226 650C1188 700 1170 750 1180 800Z"/>
+        <path d="M1180 800C1120 780 1096 740 1104 700C1150 724 1176 760 1180 800Z"/>
+      </g>
+    </svg>
+    <svg class="ls-moonlight" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="lsMg"><stop offset="0" stop-color="rgba(111,150,255,.34)"/><stop offset=".55" stop-color="rgba(74,114,209,.1)"/><stop offset="1" stop-color="rgba(74,114,209,0)"/></radialGradient>
+        <linearGradient id="lsMs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(120,160,255,.2)"/><stop offset="1" stop-color="rgba(120,160,255,0)"/></linearGradient>
+      </defs>
+      <circle cx="960" cy="290" r="560" fill="url(#lsMg)"/>
+      <path d="M800 494L1128 494L1000 880L500 880Z" fill="url(#lsMs)"/>
+    </svg>
+    <svg class="ls-lamplight" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="lsLg"><stop offset="0" stop-color="rgba(255,190,128,.4)"/><stop offset=".5" stop-color="rgba(255,150,80,.1)"/><stop offset="1" stop-color="rgba(255,150,80,0)"/></radialGradient>
+        <linearGradient id="lsLs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(255,190,128,.26)"/><stop offset="1" stop-color="rgba(255,190,128,0)"/></linearGradient>
+      </defs>
+      <circle cx="470" cy="250" r="600" fill="url(#lsLg)"/>
+      <path d="M436 252L504 252L700 880L250 880Z" fill="url(#lsLs)"/>
+    </svg>
+  </div></div>
+  <div class="ls-dust"></div>
+  <div class="ls-vig"></div>
+</div>
 
 <canvas id="scene-canvas" aria-hidden="true"></canvas>
 <div class="vignette" aria-hidden="true"></div>
@@ -27,7 +103,7 @@
 <nav>
   <div class="container nav-row">
     <a href="#top" class="brand">
-      <img src="assets/img/logo.png" alt="Logo Electro Centro Bonao" width="40" height="40">
+      <picture><source type="image/webp" srcset="assets/img/logo-sm.webp"><img src="assets/img/logo-sm.png" alt="Logo Electro Centro Bonao" width="40" height="40" decoding="async"></picture>
       <span class="brand-name">Electro Centro Bonao<span>ELECTRODOMÉSTICOS Y MUEBLES</span></span>
     </a>
     <div class="nav-links">
@@ -90,7 +166,7 @@
     </div>
   </div>
   <aside class="contact-card" aria-label="Contacto y redes sociales">
-    <img class="cc-logo" src="assets/img/logo.png" alt="Logo Electro Centro Bonao" width="104" height="104">
+    <picture><source type="image/webp" srcset="assets/img/logo-sm.webp"><img class="cc-logo" src="assets/img/logo-sm.png" alt="Logo Electro Centro Bonao" width="104" height="104" decoding="async"></picture>
     <p class="cc-name">Electro Centro Bonao</p>
     <p class="cc-tag">Electrodomésticos · Muebles · Financiamiento</p>
     <div class="cc-social">
@@ -156,10 +232,10 @@
 <section id="ofertas"><div class="container">
 <div class="sec-head reveal"><p class="kicker">Ofertas del momento</p><h2>Precios que se sienten en el bolsillo</h2><p>Nueva mercancía y financiamiento a tu medida. Pregunta por disponibilidad.</p></div>
 <div class="offer-grid">
-<article class="offer reveal"><div class="offer-img"><img loading="lazy" src="assets/img/galeria-02-nueva-mercancia-sala.jpg" alt="Juego de sala en caoba" style="object-position:center 58%"><span class="offer-tag">Nueva mercancía</span></div>
+<article class="offer reveal"><div class="offer-img"><picture><source type="image/webp" srcset="assets/img/galeria-02-nueva-mercancia-sala-640.webp 640w, assets/img/galeria-02-nueva-mercancia-sala-960.webp 960w" sizes="(max-width:700px) 80vw, 560px"><img loading="lazy" decoding="async" alt="Juego de sala en caoba" style="object-position:center 58%" src="assets/img/galeria-02-nueva-mercancia-sala.jpg" width="1264" height="1632"></picture><span class="offer-tag">Nueva mercancía</span></div>
 <div class="offer-body"><h3>Juego de sala en caoba</h3><p>Sofá, dos butacas y mesa de centro. Incluye 5 años de garantía.</p><p class="was">Antes RD$ 64,985</p><p class="now"><small>Ahora RD$</small><span data-count="54995">54,995</span></p><span class="save">Ahorras RD$ 9,990</span>
 <a class="btn btn-primary" href="https://wa.me/18095253216" target="_blank" rel="noopener" data-wa="Hola, me interesa el juego de sala en caoba (RD$ 54,995)."><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.33 4.95L2 22l5.28-1.39a9.9 9.9 0 0 0 4.76 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>Lo quiero</a></div></article>
-<article class="offer reveal"><div class="offer-img"><img loading="lazy" src="assets/img/galeria-03-oferta-aposento.jpg" alt="Juegos de aposento a 5 meses sin intereses" style="object-position:center 40%"><span class="offer-tag">¡Oferta!</span></div>
+<article class="offer reveal"><div class="offer-img"><picture><source type="image/webp" srcset="assets/img/galeria-03-oferta-aposento-640.webp 640w, assets/img/galeria-03-oferta-aposento-960.webp 960w" sizes="(max-width:700px) 80vw, 560px"><img loading="lazy" decoding="async" alt="Juegos de aposento a 5 meses sin intereses" style="object-position:center 40%" src="assets/img/galeria-03-oferta-aposento.jpg" width="1264" height="1632"></picture><span class="offer-tag">¡Oferta!</span></div>
 <div class="offer-body"><h3>Juegos de aposento</h3><p>5 meses sin intereses en todos nuestros juegos de aposento, a precio de fábrica.</p><p class="now" style="margin-top:12px"><small>Hasta</small>5 meses</p><span class="save">Sin intereses</span>
 <a class="btn btn-primary" href="https://wa.me/18095253216" target="_blank" rel="noopener" data-wa="Hola, quiero información de la oferta de aposentos a 5 meses sin intereses."><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.33 4.95L2 22l5.28-1.39a9.9 9.9 0 0 0 4.76 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>Cotizar aposento</a><p class="fine">*Algunas restricciones aplican.</p></div></article>
 </div>
@@ -213,15 +289,15 @@
     </div>
     <div class="gal-grid reveal">
       <div class="gal-item full">
-        <img loading="lazy" decoding="async" src="assets/img/galeria-01-fachada.jpg" alt="Fachada de Electro Centro Bonao en Plaza Bonatica, Bonao">
+        <picture><source type="image/webp" srcset="assets/img/galeria-01-fachada-800.webp 800w, assets/img/galeria-01-fachada-1200.webp 1200w" sizes="(max-width:900px) 92vw, 780px"><img loading="lazy" decoding="async" alt="Fachada de Electro Centro Bonao en Plaza Bonatica, Bonao" src="assets/img/galeria-01-fachada.jpg" width="1280" height="966"></picture>
         <div class="gal-caption">Fachada · Plaza Bonatica, Bonao</div>
       </div>
       <div class="gal-item">
-        <img loading="lazy" decoding="async" src="assets/img/galeria-04-materiales.jpg" alt="Sofá en tela bouclé con base en cobre encerado" style="object-position:bottom">
+        <picture><source type="image/webp" srcset="assets/img/galeria-04-materiales-640.webp 640w, assets/img/galeria-04-materiales-960.webp 960w" sizes="(max-width:500px) 92vw, (max-width:900px) 46vw, 380px"><img loading="lazy" decoding="async" alt="Sofá en tela bouclé con base en cobre encerado" style="object-position:bottom" src="assets/img/galeria-04-materiales.jpg" width="1264" height="1632"></picture>
         <div class="gal-caption">Materiales · Bouclé y cobre encerado</div>
       </div>
       <div class="gal-item">
-        <img loading="lazy" decoding="async" src="assets/img/galeria-05-interior-confort.jpg" alt="Catálogo de muebles de interior y confort de Electro Centro Bonao" style="object-position:bottom">
+        <picture><source type="image/webp" srcset="assets/img/galeria-05-interior-confort-640.webp 640w, assets/img/galeria-05-interior-confort-960.webp 960w" sizes="(max-width:500px) 92vw, (max-width:900px) 46vw, 380px"><img loading="lazy" decoding="async" alt="Catálogo de muebles de interior y confort de Electro Centro Bonao" style="object-position:bottom" src="assets/img/galeria-05-interior-confort.jpg" width="1264" height="1632"></picture>
         <div class="gal-caption">Interior & Confort</div>
       </div>
     </div>
@@ -274,7 +350,12 @@
       </div>
     </div>
     <div class="map-visual reveal">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3773.7868485283598!2d-70.4130341!3d18.9408266!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eafdf509e668639%3A0x7b97da8386cd9e9e!2sElectro%20Centro%20Bonao!5e0!3m2!1ses-419!2sdo!4v1790373283368!5m2!1ses-419!2sdo" title="Mapa de Electro Centro Bonao en Plaza Bonatica" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <div class="map-facade">
+        <div class="map-pin"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.4" fill="#101828"/></svg><span class="pulse"></span></div>
+        <b>Plaza Bonatica</b><span>Bonao, República Dominicana</span>
+        <button class="btn btn-primary map-load" type="button">Ver mapa interactivo</button>
+      </div>
+      <iframe data-src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3773.7868485283598!2d-70.4130341!3d18.9408266!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eafdf509e668639%3A0x7b97da8386cd9e9e!2sElectro%20Centro%20Bonao!5e0!3m2!1ses-419!2sdo!4v1790373283368!5m2!1ses-419!2sdo" title="Mapa de Electro Centro Bonao en Plaza Bonatica" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
   </div>
 </section>
@@ -300,7 +381,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <div class="brand">
-          <img src="assets/img/logo.png" alt="Logo Electro Centro Bonao" width="40" height="40">
+          <picture><source type="image/webp" srcset="assets/img/logo-sm.webp"><img src="assets/img/logo-sm.png" alt="Logo Electro Centro Bonao" width="40" height="40" decoding="async"></picture>
           <span class="brand-name">Electro Centro Bonao</span>
         </div>
         <p>Electrodomésticos y muebles para el hogar, en Plaza Bonatica, Bonao.</p>
@@ -340,9 +421,8 @@
 
 <div class="toast" id="toast"></div>
 
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="js/scene.js" defer></script>
 <script src="js/interactions.js" defer></script>
 <script src="js/extras.js" defer></script>
+<script src="js/fx.js" defer></script>
 </body>
 </html>
